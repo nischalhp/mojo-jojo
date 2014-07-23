@@ -1,6 +1,8 @@
 from flask import Flask,jsonify,send_file
 from flask import request
 from instamojohelper import InstamojoHelper
+import uuid
+import os
 app=Flask(__name__,instance_relative_config=True)
 
 
@@ -12,12 +14,13 @@ def index():
 # url to upload the file
 @app.route('/upload/', methods=['POST'])
 def upload_file():
-	print len(request.files)
-	f = request.form['file']
-	helper_object = InstamojoHelper()
-	helper_object.create_offers_from_file(f)	
-
-
+    f = request.files['file']
+    random_num = uuid.uuid1()
+    filename = f.filename+str(random_num)
+    f.save(filename)
+    insta_obj = InstamojoHelper()
+    insta_obj.create_offers_from_file(f.filename+str(random_num))
+    return 'ok' 
 
 
 if __name__=='__main__':
