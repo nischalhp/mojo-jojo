@@ -7,7 +7,7 @@ class InstamojoHelper:
 
 	def __init__(self):
 
-		self.api = Instamojo(api_id=conf.api_id, token=conf.token)
+		self.api = Instamojo(app_id=conf.api_id, token=conf.token)
 		
 		self.TITLE = 0
 		self.BASE_PRICE = 1
@@ -27,7 +27,7 @@ class InstamojoHelper:
 
 		status_list = []
 
-		with open(inp_file,'r') as offer_file:
+		with open(inp_file, mode='r',buffering=1) as offer_file:
 
 			reader = csv.reader(offer_file,delimiter=',')
 			row_number = 1
@@ -39,7 +39,6 @@ class InstamojoHelper:
 				if validated_line['status']:
 					response = self._create_offer(row)
 					print response
-
 				row_number += 1
 
 		print status_list
@@ -77,7 +76,7 @@ class InstamojoHelper:
 			status_dict['message'] = 'offer line does not have title or base price or currency type mentioned'	
 
 		# check currency 
-		elif line[self.CURRENCY] not in currencies:
+		elif line[self.CURRENCY] not in CURRENCIES:
 			status_dict['status'] = False 
 			status_dict['message'] = 'right currency is not mentioned'	
 
